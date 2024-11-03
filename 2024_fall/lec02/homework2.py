@@ -12,5 +12,3 @@ h = str(-23.0)
 i = float(False)
 j = bool("Python")
 k = "print2" + "_squ"
-
-print(a, b, c, d, e, f, g, h, i, j, k)
