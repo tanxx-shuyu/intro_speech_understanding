@@ -11,5 +11,14 @@ def dft_matrix(N):
     W (NxN array): a matrix of dtype='complex' whose (k,n)^th element is:
            W[k,n] = cos(2*np.pi*k*n/N) - j*sin(2*np.pi*k*n/N)
     '''
-    raise RuntimeError("You need to write this part")
+    # Create a grid of indices k and n
+    k = np.arange(N).reshape((N, 1))  # Column vector of indices
+    n = np.arange(N)                  # Row vector of indices
 
+    # Compute the exponent for each element
+    exponent = -2j * np.pi * k * n / N
+
+    # Compute the DFT matrix using the exponential function
+    W = np.exp(exponent)
+
+    return W
