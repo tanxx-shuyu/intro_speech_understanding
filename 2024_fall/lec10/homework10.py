@@ -16,7 +16,23 @@ def waveform_to_frames(waveform, frame_length, step):
     For every n and t such that 0 <= t*step+n <= N-1, it should be the case that 
        frames[n,t] = waveform[t*step+n]
     '''
-    raise RuntimeError("You need to change this part")
+    # Calculate the number of frames needed
+    N = len(waveform)
+    num_frames = int(np.ceil((N - frame_length) / step)) + 1
+
+    # Initialize the frames array with zeros
+    frames = np.zeros((frame_length, num_frames))
+
+    # Populate the frames
+    for t in range(num_frames):
+        start_index = t * step
+        end_index = start_index + frame_length
+
+        # Ensure we do not go out of bounds
+        if start_index < N:
+            frames[:max(0, min(frame_length, N - start_index)), t] = waveform[start_index:end_index]
+
+    return frames
 
 def frames_to_stft(frames):
     '''
@@ -28,7 +44,9 @@ def frames_to_stft(frames):
     @returns:
     stft (np.ndarray((frame_length,num_frames))) - the STFT (complex-valued)
     '''
-    raise RuntimeError("You need to change this part")
+    # Apply FFT along each column of the frames matrix
+    stft = np.fft.fft(frames, axis=0)
+    return stft
 
 def stft_to_spectrogram(stft):
     '''
@@ -46,6 +64,18 @@ def stft_to_spectrogram(stft):
     np.amax(spectrogram) should be 0dB.
     np.amin(spectrogram) should be no smaller than -60dB.
     '''
-    raise RuntimeError("You need to change this part")
+    # Calculate the magnitude of the STFT
+    magnitude = np.abs(stft)
+
+    # Convert to decibels
+    spectrogram = 20 * np.log10(magnitude + 1e-10)  # Add small value to avoid log of zero
+
+    # Normalize so the maximum value is 0dB
+    spectrogram -= np.amax(spectrogram)
+
+    # Clip the values to be no smaller than -60dB
+    spectrogram = np.clip(spectrogram, -60, 0)
+
+    return spectrogram
 
 
